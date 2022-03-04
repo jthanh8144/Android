@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Layout</string>
+    <string name="a">a</string>
+    <string name="two_numbers">Two numbers</string>
+    <string name="b">b</string>
+    <string name="plus">+</string>
+    <string name="sub">-</string>
+    <string name="mul">*</string>
+    <string name="devi">/</string>
+</resources>
