@@ -4,6 +4,7 @@ import androidx.room.*;
 
 import java.util.List;
 
+@Dao
 public interface ContactDao {
     @Query("SELECT * FROM Contact")
     List<Contact> getAll();
