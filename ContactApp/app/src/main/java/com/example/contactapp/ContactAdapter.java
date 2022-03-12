@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +31,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tvName.setText(contacts.get(position).getName());
+        
+//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                Toast.makeText(view.getContext(), "" + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
     }
 
     @Override
@@ -46,6 +55,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             tvName = view.findViewById(R.id.tv_fullname);
             ivAvatar = view.findViewById(R.id.iv_avatar);
 
+//            view.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View view) {
+//                    Toast.makeText(itemView.getContext(), itemView.toString(), Toast.LENGTH_SHORT).show();
+//                    return false;
+//                }
+//            });
         }
     }
 }

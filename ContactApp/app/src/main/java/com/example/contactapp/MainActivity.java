@@ -1,15 +1,21 @@
 package com.example.contactapp;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.contactapp.databinding.ActivityMainBinding;
 
@@ -23,6 +29,17 @@ public class MainActivity extends AppCompatActivity {
 
     private AppDatabase appDatabase;
     private ContactDao contactDao;
+
+    private void updateContacts() {
+        this.contacts.clear();
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                contacts.addAll(contactDao.getAll());
+            }
+        });
+        contactAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -40,10 +57,21 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    updateContacts();
+                } else {
+                    contacts.clear();
+                    Executors.newSingleThreadExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            contacts.addAll(contactDao.findByName(newText));
+                        }
+                    });
+                    contactAdapter.notifyDataSetChanged();
+                }
                 return false;
             }
         });
-
         return true;
     }
 
@@ -57,14 +85,6 @@ public class MainActivity extends AppCompatActivity {
         appDatabase = AppDatabase.getInstance(this);
         contactDao = appDatabase.contactDao();
 
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                Contact a = new Contact("Nguyen Van A", "0123", "a@gmail.com");
-//                contactDao.insertAll(a);
-//            }
-//        });
-
         contacts = new ArrayList<>();
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -77,11 +97,35 @@ public class MainActivity extends AppCompatActivity {
         binding.rvContacts.setAdapter(contactAdapter);
         binding.rvContacts.setLayoutManager(new LinearLayoutManager(this));
 
+        ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            String name = data.getStringExtra("name");
+                            String phone = data.getStringExtra("phone");
+                            String email = data.getStringExtra("email");
+
+                            Executors.newSingleThreadExecutor().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    contactDao.insertAll(new Contact(name, phone, email));
+                                }
+                            });
+                            updateContacts();
+                            Toast.makeText(getApplicationContext(), "Thêm liên hệ thành công!!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+        );
+
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
-                startActivity(intent);
+                resultLauncher.launch(intent);
             }
         });
     }
