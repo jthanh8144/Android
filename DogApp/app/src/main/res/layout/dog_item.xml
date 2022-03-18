@@ -34,15 +34,15 @@
 
                 <TextView
                     android:id="@+id/tv_name"
-                    android:text="Tên này là đủ dài chưa"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@+id/img_favorite"
+                    android:ellipsize="end"
                     android:singleLine="true"
-                    android:ellipsize="end"/>
+                    android:text="Tên này là đủ dài chưa"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/img_favorite"

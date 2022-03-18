@@ -16,11 +16,15 @@ public class Contact {
     @ColumnInfo
     private String email;
 
+    @ColumnInfo
+    private boolean mark;
+
     public Contact(String name, String mobile, String email) {
 //        this.id = id;
         this.name = name;
         this.mobile = mobile;
         this.email = email;
+        this.mark = false;
     }
 
     public void setId(int id) {
@@ -39,6 +43,10 @@ public class Contact {
         this.email = email;
     }
 
+    public void setMark(boolean mark) {
+        this.mark = mark;
+    }
+
     public int getId() {
         return id;
     }
@@ -53,5 +61,9 @@ public class Contact {
 
     public String getEmail() {
         return email;
+    }
+
+    public boolean isMark() {
+        return mark;
     }
 }

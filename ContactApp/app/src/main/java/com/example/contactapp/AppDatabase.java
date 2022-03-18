@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.room.*;
 
-@Database(entities = {Contact.class}, version = 1)
+@Database(entities = {Contact.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ContactDao contactDao();
     private static AppDatabase instance;

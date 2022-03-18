@@ -3,7 +3,7 @@
     package="com.example.contactapp">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="Danh bạ"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -13,7 +13,11 @@
             android:name=".AddActivity"
             android:exported="false"
             android:label="Thêm liên hệ"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".DetailActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

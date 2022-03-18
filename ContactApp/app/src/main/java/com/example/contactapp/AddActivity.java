@@ -14,8 +14,11 @@ import android.widget.Toast;
 
 import com.example.contactapp.databinding.ActivityAddBinding;
 
+import java.util.concurrent.Executors;
+
 public class AddActivity extends AppCompatActivity {
     private ActivityAddBinding binding;
+    private boolean isUpdate = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -32,7 +35,18 @@ public class AddActivity extends AppCompatActivity {
                 String phone = binding.etPhone.getText().toString();
                 String email = binding.etEmail.getText().toString();
                 if (name.isEmpty() == false && phone.isEmpty() == false) {
-                    Intent intent = new Intent();
+//                    Intent intent = new Intent();
+//                    intent.putExtra("name", name);
+//                    intent.putExtra("phone", phone);
+//                    intent.putExtra("email", email);
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+                    Intent intent;
+                    if (isUpdate == false) {
+                        intent = new Intent(AddActivity.this, MainActivity.class);
+                    } else {
+                        intent = new Intent(AddActivity.this, DetailActivity.class);
+                    }
                     intent.putExtra("name", name);
                     intent.putExtra("phone", phone);
                     intent.putExtra("email", email);
@@ -55,6 +69,18 @@ public class AddActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Intent intent = getIntent();
+        if (intent != null) {
+            setTitle("Chỉnh sửa liên hệ");
+            Executors.newSingleThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    binding.etName.setText(intent.getStringExtra("name"));
+                    binding.etPhone.setText(intent.getStringExtra("phone"));
+                    binding.etEmail.setText(intent.getStringExtra("email"));
+                }
+            });
+        }
     }
 }

@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        contactAdapter = new ContactAdapter(contacts);
+        contactAdapter = new ContactAdapter(contacts, this);
         binding.rvContacts.setAdapter(contactAdapter);
         binding.rvContacts.setLayoutManager(new LinearLayoutManager(this));
 
@@ -126,6 +126,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
                 resultLauncher.launch(intent);
+            }
+        });
+
+        contactAdapter.setOnItemClickListener(new ContactAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Contact contact) {
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("id", contact.getId());
+                startActivity(intent);
             }
         });
     }
