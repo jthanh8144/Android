@@ -117,6 +117,7 @@ public class DetailActivity extends AppCompatActivity {
                             String uri = data.getStringExtra("avatar");
                             byte[] avatar = null;
                             if (uri.equals("") == false) {
+                                binding.imgAvatar.setImageURI(Uri.parse(uri));
                                 Bitmap bitmap = null;
                                 try {
                                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(uri));
@@ -132,7 +133,6 @@ public class DetailActivity extends AppCompatActivity {
                             String email = data.getStringExtra("email");
                             contactDao.update(id, avatar, firstName, lastName, phone, email, contactDao.findById(id).isMark());
 
-                            binding.imgAvatar.setImageURI(Uri.parse(uri));
                             binding.tvName.setText(lastName + " " + firstName);
                             binding.tvPhone.setText(phone);
                             if (email.isEmpty()) {
