@@ -1,8 +1,15 @@
 package com.example.contactapp;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,20 +19,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
-
 import com.example.contactapp.databinding.ActivityAddBinding;
+import com.example.contactapp.databinding.ActivityUpdateBinding;
 
-public class AddActivity extends AppCompatActivity {
-    private ActivityAddBinding binding;
+public class UpdateActivity extends AppCompatActivity {
+    private ActivityUpdateBinding binding;
+    private AppDatabase appDatabase;
+    private ContactDao contactDao;
+    private int id = -1;
     private Uri selectedImage;
-    private Bitmap avatar;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,31 +67,47 @@ public class AddActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        selectedImage = result.getData().getData();
-                        binding.imgAvatar.setImageURI(selectedImage);
-                    }
-                }
-            }
-    );
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAddBinding.inflate(getLayoutInflater());
+        binding = ActivityUpdateBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        appDatabase = AppDatabase.getInstance(this);
+        contactDao = appDatabase.contactDao();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            id = intent.getIntExtra("id", -1);
+            Contact contact = contactDao.findById(id);
+            if (contact.getAvatar() != null) {
+                binding.imgAvatar.setImageBitmap(BitmapHelper.byteArrayToBitmap(contact.getAvatar()));
+            }
+            binding.etFirstName.setText(contact.getFirstName());
+            binding.etLastName.setText(contact.getLastName());
+            binding.etPhone.setText(contact.getMobile());
+            binding.etEmail.setText(contact.getEmail());
+        }
+
+        ActivityResultLauncher<Intent> chooseImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            selectedImage = result.getData().getData();
+                            binding.imgAvatar.setImageURI(selectedImage);
+                        }
+                    }
+                }
+        );
 
         binding.btnPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                resultLauncher.launch(intent);
+                chooseImageLauncher.launch(intent);
             }
         });
     }

@@ -1,6 +1,11 @@
 package com.example.contactapp;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import androidx.room.*;
+
+import java.net.URI;
 
 @Entity
 public class Contact {
@@ -8,7 +13,13 @@ public class Contact {
     private int id;
 
     @ColumnInfo
-    private String name;
+    private byte[] avatar;
+
+    @ColumnInfo
+    private String firstName;
+
+    @ColumnInfo
+    private String lastName;
 
     @ColumnInfo
     private String mobile;
@@ -19,9 +30,10 @@ public class Contact {
     @ColumnInfo
     private boolean mark;
 
-    public Contact(String name, String mobile, String email) {
-//        this.id = id;
-        this.name = name;
+    public Contact(byte[] avatar, String firstName, String lastName, String mobile, String email) {
+        this.avatar = avatar;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.mobile = mobile;
         this.email = email;
         this.mark = false;
@@ -31,8 +43,16 @@ public class Contact {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setMobile(String mobile) {
@@ -51,8 +71,16 @@ public class Contact {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public String getMobile() {

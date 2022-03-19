@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.contactapp">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ContactApp">
+        <activity
+            android:name=".UpdateActivity"
+            android:exported="false"
+            android:label="Chỉnh sửa liên hệ"
+            android:parentActivityName=".DetailActivity"/>
         <activity
             android:name=".AddActivity"
             android:exported="false"

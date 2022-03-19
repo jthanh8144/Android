@@ -2,6 +2,7 @@ package com.example.contactapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
     private ArrayList<Contact> contacts;
@@ -35,7 +37,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvName.setText(contacts.get(position).getName());
+        Contact contact = contacts.get(position);
+        holder.tvName.setText(contact.getLastName() + " " + contact.getFirstName());
+        if (contact.getAvatar() != null) {
+            holder.ivAvatar.setImageBitmap(BitmapHelper.byteArrayToBitmap(contact.getAvatar()));
+        } else {
+            holder.ivAvatar.setImageResource(
+                    context.getResources().getIdentifier("ic_baseline_person_24", "drawable", context.getPackageName()));
+        }
     }
 
     @Override
@@ -69,5 +78,27 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setContacts(List<Contact> listContacts) {
+        this.contacts.clear();
+        this.contacts.addAll(listContacts);
+        notifyDataSetChanged();
+    }
+
+    public void findByName(List<Contact> listContacts, String name) {
+        this.contacts.clear();
+        if (name.isEmpty()) {
+            this.contacts.addAll(listContacts);
+        } else {
+            name = name.toLowerCase();
+            for (Contact contact : listContacts) {
+                String fullName = contact.getLastName() + " " + contact.getFirstName();
+                if (fullName.toLowerCase().contains(name)) {
+                    this.contacts.add(contact);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }
