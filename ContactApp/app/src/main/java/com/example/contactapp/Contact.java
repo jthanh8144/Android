@@ -1,11 +1,6 @@
 package com.example.contactapp;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-
 import androidx.room.*;
-
-import java.net.URI;
 
 @Entity
 public class Contact {

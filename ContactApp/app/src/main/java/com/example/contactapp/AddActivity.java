@@ -2,7 +2,6 @@ package com.example.contactapp;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,7 +24,6 @@ import com.example.contactapp.databinding.ActivityAddBinding;
 public class AddActivity extends AppCompatActivity {
     private ActivityAddBinding binding;
     private Uri selectedImage;
-    private Bitmap avatar;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

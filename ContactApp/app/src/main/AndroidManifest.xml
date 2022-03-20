@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_baseline_person_24"
         android:label="Danh bạ"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"

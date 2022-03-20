@@ -2,7 +2,6 @@ package com.example.contactapp;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
