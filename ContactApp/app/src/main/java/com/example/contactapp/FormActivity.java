@@ -1,7 +1,16 @@
 package com.example.contactapp;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,22 +20,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
+import com.example.contactapp.databinding.ActivityFormBinding;
 
-import com.example.contactapp.databinding.ActivityUpdateBinding;
+import java.io.IOException;
 
-public class UpdateActivity extends AppCompatActivity {
-    private ActivityUpdateBinding binding;
+public class FormActivity extends AppCompatActivity {
+    private ActivityFormBinding binding;
+    private Uri selectedImage;
+
     private AppDatabase appDatabase;
     private ContactDao contactDao;
     private int id = -1;
-    private Uri selectedImage;
+    private Contact contact;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,15 +50,22 @@ public class UpdateActivity extends AppCompatActivity {
                 String email = binding.etEmail.getText().toString();
                 if (firstName.isEmpty() == false && phone.isEmpty() == false) {
                     Intent intent = new Intent();
-                    if (selectedImage == null) {
-                        intent.putExtra("avatar", "");
+                    if (id == -1) {
+                        Contact c = new Contact(null, firstName, lastName, phone, email);
+                        intent.putExtra("contact", c);
                     } else {
-                        intent.putExtra("avatar", selectedImage.toString());
+                        contact.setFirstName(firstName);
+                        contact.setLastName(lastName);
+                        contact.setMobile(phone);
+                        contact.setEmail(email);
+                        contact.setAvatar(null);
+                        intent.putExtra("contact", contact);
                     }
-                    intent.putExtra("firstName", firstName);
-                    intent.putExtra("lastName", lastName);
-                    intent.putExtra("phone", phone);
-                    intent.putExtra("email", email);
+                    if (selectedImage == null) {
+                        intent.putExtra("uri", "");
+                    } else {
+                        intent.putExtra("uri", selectedImage.toString());
+                    }
                     setResult(RESULT_OK, intent);
                     finish();
                 } else {
@@ -69,17 +81,16 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityUpdateBinding.inflate(getLayoutInflater());
+        binding = ActivityFormBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        appDatabase = AppDatabase.getInstance(this);
-        contactDao = appDatabase.contactDao();
-
         Intent intent = getIntent();
-        if (intent != null) {
+        if (intent.getIntExtra("id", -1) != -1) {
+            appDatabase = AppDatabase.getInstance(this);
+            contactDao = appDatabase.contactDao();
             id = intent.getIntExtra("id", -1);
-            Contact contact = contactDao.findById(id);
+            contact = contactDao.findById(id);
             if (contact.getAvatar() != null) {
                 binding.imgAvatar.setImageBitmap(BitmapHelper.byteArrayToBitmap(contact.getAvatar()));
             }
@@ -89,7 +100,7 @@ public class UpdateActivity extends AppCompatActivity {
             binding.etEmail.setText(contact.getEmail());
         }
 
-        ActivityResultLauncher<Intent> chooseImageLauncher = registerForActivityResult(
+        ActivityResultLauncher<Intent> selectPhotoLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -106,7 +117,7 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                chooseImageLauncher.launch(intent);
+                selectPhotoLauncher.launch(intent);
             }
         });
     }

@@ -2,8 +2,10 @@ package com.example.contactapp;
 
 import androidx.room.*;
 
+import java.io.Serializable;
+
 @Entity
-public class Contact {
+public class Contact implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 

@@ -105,29 +105,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
+        ActivityResultLauncher<Intent> addLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             Intent data = result.getData();
-                            String uri = data.getStringExtra("avatar");
-                            byte[] avatar = null;
-                            if (uri.equals("") == false) {
+                            String uriString = data.getStringExtra("uri");
+                            byte[] bytes = null;
+                            if (!uriString.isEmpty()) {
+                                Uri uri = Uri.parse(uriString);
                                 Bitmap bitmap = null;
                                 try {
-                                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(uri));
+                                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                avatar = BitmapHelper.bitmapToByteArray(bitmap);
+                                bytes = BitmapHelper.bitmapToByteArray(bitmap);
                             }
-                            String firstName = data.getStringExtra("firstName");
-                            String lastName = data.getStringExtra("lastName");
-                            String phone = data.getStringExtra("phone");
-                            String email = data.getStringExtra("email");
-                            contactViewModel.insert(new Contact(avatar, firstName, lastName, phone, email));
+                            Contact contact = (Contact) data.getSerializableExtra("contact");
+                            contact.setAvatar(bytes);
+                            contactViewModel.insert(contact);
                             contactAdapter.setContacts(contactDao.getAll());
                             Toast.makeText(getApplicationContext(), "Thêm liên hệ thành công!!", Toast.LENGTH_LONG).show();
                         }
@@ -138,8 +137,9 @@ public class MainActivity extends AppCompatActivity {
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddActivity.class);
-                resultLauncher.launch(intent);
+//                Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                Intent intent = new Intent(MainActivity.this, FormActivity.class);
+                addLauncher.launch(intent);
             }
         });
 

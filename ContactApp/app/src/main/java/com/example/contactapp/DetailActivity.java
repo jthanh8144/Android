@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,7 +32,8 @@ public class DetailActivity extends AppCompatActivity {
     private AppDatabase appDatabase;
     private ContactDao contactDao;
     private int id;
-    ActivityResultLauncher<Intent> updateLauncher;
+    private Contact contact;
+    private ActivityResultLauncher<Intent> updateLauncher;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,7 +47,7 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btn_edit:
-                Intent intent = new Intent(DetailActivity.this, UpdateActivity.class);
+                Intent intent = new Intent(DetailActivity.this, FormActivity.class);
                 intent.putExtra("id", id);
                 updateLauncher.launch(intent);
                 break;
@@ -94,7 +96,7 @@ public class DetailActivity extends AppCompatActivity {
         if (intent != null) {
             id = intent.getIntExtra("id", -1);
         }
-        Contact contact = contactDao.findById(id);
+        contact = contactDao.findById(id);
         if (contact.getAvatar() != null) {
             binding.imgAvatar.setImageBitmap(BitmapHelper.byteArrayToBitmap(contact.getAvatar()));
         }
@@ -112,33 +114,34 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
+                            Log.d("DEGUG0", "detail result");
                             Intent data = result.getData();
-                            String uri = data.getStringExtra("avatar");
-                            byte[] avatar = null;
-                            if (uri.equals("") == false) {
-                                binding.imgAvatar.setImageURI(Uri.parse(uri));
+                            Contact c = (Contact) data.getSerializableExtra("contact");
+                            String uriString = data.getStringExtra("uri");
+                            if (uriString.isEmpty()) {
+                                Log.d("DEBUG0", contact.getAvatar() + "");
+                                c.setAvatar(contact.getAvatar());
+                            } else {
+                                Uri uri = Uri.parse(uriString);
                                 Bitmap bitmap = null;
                                 try {
-                                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(uri));
-
+                                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                avatar = BitmapHelper.bitmapToByteArray(bitmap);
+                                byte[] bytes = BitmapHelper.bitmapToByteArray(bitmap);
+                                c.setAvatar(bytes);
+                                binding.imgAvatar.setImageURI(uri);
                             }
-                            String firstName = data.getStringExtra("firstName");
-                            String lastName = data.getStringExtra("lastName");
-                            String phone = data.getStringExtra("phone");
-                            String email = data.getStringExtra("email");
-                            contactDao.update(id, avatar, firstName, lastName, phone, email, contactDao.findById(id).isMark());
+                            contactDao.update(c);
 
-                            binding.tvName.setText(lastName + " " + firstName);
-                            binding.tvPhone.setText(phone);
-                            if (email.isEmpty()) {
+                            binding.tvName.setText(c.getLastName() + " " + c.getFirstName());
+                            binding.tvPhone.setText(c.getMobile());
+                            if (c.getEmail().isEmpty()) {
                                 binding.llEmail.setVisibility(View.GONE);
                             } else {
                                 binding.llEmail.setVisibility(View.VISIBLE);
-                                binding.tvEmail.setText(email);
+                                binding.tvEmail.setText(c.getEmail());
                             }
                             Toast.makeText(getApplicationContext(), "Chỉnh sửa liên hệ thành công!!", Toast.LENGTH_LONG).show();
                         }
