@@ -16,6 +16,7 @@
             android:exported="false" />
         <activity
             android:name=".DetailActivity"
+            android:label="Chi tiết"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity

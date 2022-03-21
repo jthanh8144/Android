@@ -87,6 +87,7 @@ public class FormActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent.getIntExtra("id", -1) != -1) {
+            setTitle("Chỉnh sửa liên hệ");
             appDatabase = AppDatabase.getInstance(this);
             contactDao = appDatabase.contactDao();
             id = intent.getIntExtra("id", -1);
@@ -98,6 +99,8 @@ public class FormActivity extends AppCompatActivity {
             binding.etLastName.setText(contact.getLastName());
             binding.etPhone.setText(contact.getMobile());
             binding.etEmail.setText(contact.getEmail());
+        } else {
+            setTitle("Thêm liên hệ");
         }
 
         ActivityResultLauncher<Intent> selectPhotoLauncher = registerForActivityResult(

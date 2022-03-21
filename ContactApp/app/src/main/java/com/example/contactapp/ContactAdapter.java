@@ -35,12 +35,21 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Contact contact = contacts.get(position);
+        String s = contact.getFirstName().substring(0, 1).toUpperCase();
+
         holder.tvName.setText(contact.getLastName() + " " + contact.getFirstName());
         if (contact.getAvatar() != null) {
+            holder.tvAvatar.setVisibility(View.GONE);
+            holder.ivAvatar.setVisibility(View.VISIBLE);
             holder.ivAvatar.setImageBitmap(BitmapHelper.byteArrayToBitmap(contact.getAvatar()));
         } else {
-            holder.ivAvatar.setImageResource(
-                    context.getResources().getIdentifier("ic_baseline_person_24", "drawable", context.getPackageName()));
+            holder.tvAvatar.setVisibility(View.VISIBLE);
+            holder.ivAvatar.setVisibility(View.GONE);
+            holder.tvAvatar.setText(s);
+        }
+        holder.tvSort.setText(s);
+        if (position != 0 && s.equals(contacts.get(position - 1).getFirstName().substring(0, 1).toUpperCase())) {
+            holder.tvSort.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -50,13 +59,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName;
-        public ImageView ivAvatar;
+        private TextView tvName;
+        private ImageView ivAvatar;
+        private TextView tvSort;
+        private TextView tvAvatar;
 
         public ViewHolder(View view) {
             super(view);
             tvName = view.findViewById(R.id.tv_fullname);
             ivAvatar = view.findViewById(R.id.iv_avatar);
+            tvSort = view.findViewById(R.id.tv_sort);
+            tvAvatar = view.findViewById(R.id.tv_avatar);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
