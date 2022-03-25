@@ -1,7 +1,8 @@
-package com.example.dogapp.view;
+package com.example.dogapp.viewmodel;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dogapp.R;
 import com.example.dogapp.model.DogBreed;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,23 +41,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DogBreed dogBreed = dogBreeds.get(position);
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final Drawable drawable = Drawable.createFromStream((InputStream) new URL(dogBreed.getUrl()).getContent(), "src");
-                    holder.imgMain.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.imgMain.setImageDrawable(drawable);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
+        Picasso.get().load(dogBreed.getUrl()).into(holder.imgMain);
         holder.tvName.setText(dogBreed.getName());
         holder.tvBredFor.setText(dogBreed.getBredFor());
     }
@@ -64,7 +51,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         return dogBreeds.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView imgMain;
         public TextView tvName;
         public TextView tvBredFor;
@@ -74,6 +61,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             imgMain = itemView.findViewById(R.id.img_main);
             tvName = itemView.findViewById(R.id.tv_name);
             tvBredFor = itemView.findViewById(R.id.tv_bred_for);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DogBreed dogBreed = dogBreeds.get(getAdapterPosition());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("dogBreed", dogBreed);
+                    Navigation.findNavController(view).navigate(R.id.detailsFragment, bundle);
+                }
+            });
         }
     }
 }

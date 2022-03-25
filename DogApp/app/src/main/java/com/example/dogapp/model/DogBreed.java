@@ -1,10 +1,18 @@
 package com.example.dogapp.model;
 
-import com.google.gson.annotations.SerializedName;
+import android.widget.ImageView;
 
-public class DogBreed {
+import androidx.annotation.NonNull;
+import androidx.databinding.BindingAdapter;
+
+import com.google.gson.annotations.SerializedName;
+import com.squareup.picasso.Picasso;
+
+import java.io.Serializable;
+
+public class DogBreed implements Serializable {
     @SerializedName("id")
-    private  int id;
+    private int id;
 
     @SerializedName("name")
     private String name;
@@ -67,5 +75,17 @@ public class DogBreed {
 
     public void setBredFor(String bredFor) {
         this.bredFor = bredFor;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String s = "id: " + id + ", name: " + name + ", " + lifeSpan + ", url: " + url + ", bredFor: " + bredFor;
+        return s;
+    }
+
+    @BindingAdapter("profileImage")
+    public static void loadImage(ImageView view, String imageUrl) {
+        Picasso.get().load(imageUrl).into(view);
     }
 }
