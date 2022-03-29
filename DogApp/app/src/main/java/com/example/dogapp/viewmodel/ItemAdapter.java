@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
@@ -72,5 +73,27 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 }
             });
         }
+    }
+
+    public void setDogBreeds(List<DogBreed> listDogs) {
+        this.dogBreeds.clear();
+        this.dogBreeds.addAll(listDogs);
+        notifyDataSetChanged();
+    }
+
+    public void findByName(List<DogBreed> listDogs, String name) {
+        this.dogBreeds.clear();
+        if (name.isEmpty()) {
+            this.dogBreeds.addAll(listDogs);
+//            this.contacts.addAll(listContacts);
+        } else {
+            name = name.toLowerCase();
+            for (DogBreed dogBreed : listDogs) {
+                if (dogBreed.getName().toLowerCase().contains(name)) {
+                    this.dogBreeds.add(dogBreed);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }
