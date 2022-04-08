@@ -1,15 +1,20 @@
 package com.example.midtermtest.viewmodel;
 
 import android.app.Application;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.midtermtest.model.Item;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.observers.DisposableSingleObserver;
@@ -19,12 +24,22 @@ public class ItemViewModel extends AndroidViewModel {
     private MutableLiveData<List<Item>> listItems;
     private ApiService apiService;
 
+//    private ItemDao itemDao;
+//    private AppDatabase appDatabase;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public ItemViewModel(@NonNull Application application) {
         super(application);
         apiService = ApiService.getInstance(application);
+
+//        appDatabase = AppDatabase.getInstance(application);
+//        itemDao = appDatabase.itemDao();
     }
 
     private void setListItems() {
+//        List<Item> data = itemDao.getAll();
+//        listItems.setValue(data);
+
         apiService.getItems()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

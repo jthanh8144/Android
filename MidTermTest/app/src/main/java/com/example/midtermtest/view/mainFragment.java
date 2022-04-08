@@ -17,11 +17,16 @@ import android.view.ViewGroup;
 import com.example.midtermtest.R;
 import com.example.midtermtest.model.Item;
 import com.example.midtermtest.viewmodel.ApiService;
+import com.example.midtermtest.viewmodel.AppDatabase;
 import com.example.midtermtest.viewmodel.ItemAdapter;
+import com.example.midtermtest.viewmodel.ItemDao;
 import com.example.midtermtest.viewmodel.ItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.observers.DisposableSingleObserver;
@@ -56,9 +61,29 @@ public class mainFragment extends Fragment {
                 itemAdapter.setItems(items);
             }
         });
-        for (Item item : items) {
-            Log.d("DEBUG0", item.getName());
+
+        if (!getContext().getDatabasePath("items").exists()) {
+//            Log.d("DEBUGDB", "main no");
+//            ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+//            executorService.schedule(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.d("DEBUG0", "running");
+//                }
+//            }, 10, TimeUnit.SECONDS);
+        } else {
+
         }
+
+//        viewModel.getListItems().observe(getViewLifecycleOwner(), new Observer<List<Item>>() {
+//            @Override
+//            public void onChanged(List<Item> items) {
+//                itemAdapter.setItems(items);
+//            }
+//        });
+//        for (Item item : items) {
+//            Log.d("DEBUG0", item.getName());
+//        }
 
 //        apiService = ApiService.getInstance(getContext());
 //        apiService.getItems()
