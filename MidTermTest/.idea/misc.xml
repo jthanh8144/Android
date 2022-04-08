@@ -3,11 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/activity_main.xml" value="0.151268115942029" />
-        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/fragment_detail.xml" value="0.2210144927536232" />
-        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/fragment_main.xml" value="0.151268115942029" />
-        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/item.xml" value="0.151268115942029" />
-        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/item1.xml" value="0.2210144927536232" />
+        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/activity_main.xml" value="0.13677536231884058" />
+        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/fragment_detail.xml" value="0.13677536231884058" />
+        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/fragment_main.xml" value="0.13677536231884058" />
+        <entry key="..\:/Mobile/MidTermTest/app/src/main/res/layout/item.xml" value="0.1526268115942029" />
       </map>
     </option>
   </component>

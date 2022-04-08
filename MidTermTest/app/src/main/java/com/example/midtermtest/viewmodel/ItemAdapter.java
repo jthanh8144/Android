@@ -1,13 +1,13 @@
 package com.example.midtermtest.viewmodel;
 
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.midtermtest.R;
@@ -27,15 +27,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(parent.getContext())
-//                .inflate(R.layout.item1, parent, false);
-//        return new ViewHolder(view);
-
-        ItemBinding binding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.getContext()),
-                R.layout.item,
-                parent,
-                false);
+        ItemBinding binding = DataBindingUtil
+                .inflate(LayoutInflater.from(parent.getContext()), R.layout.item, parent, false);
         return new ViewHolder(binding);
     }
 
@@ -45,11 +38,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.binding.cvMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("DEBUG0", items.get(holder.getAdapterPosition()).getName());
+                Item item = items.get(holder.getAdapterPosition());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("item", item);
+                Navigation.findNavController(view).navigate(R.id.detailFragment, bundle);
             }
         });
-//        Item item = items.get(position);
-//        holder.tvName.setText(item.getName());
     }
 
     @Override
@@ -64,12 +58,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             super(itemBinding.getRoot());
             this.binding = itemBinding;
         }
-
-//        public TextView tvName;
-//        public ViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            tvName = itemView.findViewById(R.id.tv_name);
-//        }
     }
 
     public void setItems(List<Item> listItems) {
