@@ -1,5 +1,6 @@
 package com.example.midtermtest.view;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class mainFragment extends Fragment {
     private ArrayList<Item> items;
     private RecyclerView rvMain;
-    private ApiService apiService;
     private ItemAdapter itemAdapter;
     private ItemViewModel viewModel;
 
@@ -58,50 +58,13 @@ public class mainFragment extends Fragment {
         viewModel.getListItems().observe(getViewLifecycleOwner(), new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
+                Log.d("DEBUG0", "onChanged: " + items.size());
                 itemAdapter.setItems(items);
             }
         });
-
-        if (!getContext().getDatabasePath("items").exists()) {
-//            Log.d("DEBUGDB", "main no");
-//            ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-//            executorService.schedule(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Log.d("DEBUG0", "running");
-//                }
-//            }, 10, TimeUnit.SECONDS);
-        } else {
-
-        }
-
-//        viewModel.getListItems().observe(getViewLifecycleOwner(), new Observer<List<Item>>() {
-//            @Override
-//            public void onChanged(List<Item> items) {
-//                itemAdapter.setItems(items);
-//            }
-//        });
 //        for (Item item : items) {
 //            Log.d("DEBUG0", item.getName());
 //        }
-
-//        apiService = ApiService.getInstance(getContext());
-//        apiService.getItems()
-//                .subscribeOn(Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new DisposableSingleObserver<List<Item>>() {
-//                    @Override
-//                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull List<Item> listItems) {
-//                        for (Item item : listItems) {
-//                            Log.d("DEBUG1", item.getName());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-//                        Log.d("DEBUG1", e.getMessage());
-//                    }
-//                });
     }
 
     @Override

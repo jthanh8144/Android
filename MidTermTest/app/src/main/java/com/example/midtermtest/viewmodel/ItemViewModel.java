@@ -21,39 +21,38 @@ import io.reactivex.rxjava3.observers.DisposableSingleObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ItemViewModel extends AndroidViewModel {
-    private MutableLiveData<List<Item>> listItems;
+    private static MutableLiveData<List<Item>> listItems;
     private ApiService apiService;
 
-//    private ItemDao itemDao;
-//    private AppDatabase appDatabase;
+    private static ItemDao itemDao;
+    private static AppDatabase appDatabase;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public ItemViewModel(@NonNull Application application) {
         super(application);
         apiService = ApiService.getInstance(application);
 
-//        appDatabase = AppDatabase.getInstance(application);
-//        itemDao = appDatabase.itemDao();
+        appDatabase = AppDatabase.getInstance(application);
+        itemDao = appDatabase.itemDao();
     }
 
-    private void setListItems() {
-//        List<Item> data = itemDao.getAll();
-//        listItems.setValue(data);
+    public static void setListItems() {
+        List<Item> data = itemDao.getAll();
+        listItems.setValue(data);
 
-        apiService.getItems()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<List<Item>>() {
-                    @Override
-                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull List<Item> items) {
-                        listItems.setValue(items);
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        Log.d("DEBUG0", e.getMessage());
-                    }
-                });
+//        apiService.getItems()
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeWith(new DisposableSingleObserver<List<Item>>() {
+//                    @Override
+//                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull List<Item> items) {
+//                        listItems.setValue(items);
+//                    }
+//
+//                    @Override
+//                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+//                        Log.d("DEBUG0", e.getMessage());
+//                    }
+//                });
     }
 
     public MutableLiveData<List<Item>> getListItems() {

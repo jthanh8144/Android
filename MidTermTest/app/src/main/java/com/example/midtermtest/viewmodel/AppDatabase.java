@@ -1,6 +1,7 @@
 package com.example.midtermtest.viewmodel;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
@@ -29,7 +30,7 @@ public abstract class AppDatabase extends RoomDatabase {
             instance = Room.databaseBuilder(context, AppDatabase.class, "items")
                     .allowMainThreadQueries().fallbackToDestructiveMigration().build();
             if (!context.getDatabasePath("items").exists()) {
-                Log.d("DEBUGDB", "no");
+                Log.d("DEBUGDB", "appdb no");
                 ApiService apiService = ApiService.getInstance(context);
                 apiService.getItems()
                         .subscribeOn(Schedulers.newThread())
@@ -40,6 +41,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                 for (Item item : items) {
                                     instance.itemDao().insertAll(item);
                                 }
+                                ItemViewModel.setListItems();
                             }
 
                             @Override
