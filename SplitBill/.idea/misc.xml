@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Mobile/SplitBill/app/src/main/res/drawable/ic_baseline_currency_yen_24.xml" value="0.1205" />
+        <entry key="..\:/Mobile/SplitBill/app/src/main/res/drawable/ic_dollar_sign_solid.xml" value="0.1205" />
+        <entry key="..\:/Mobile/SplitBill/app/src/main/res/drawable/ic_us_dollar.xml" value="0.1" />
       </map>
     </option>
   </component>

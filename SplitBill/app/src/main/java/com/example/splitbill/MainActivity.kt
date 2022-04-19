@@ -144,7 +144,7 @@ fun MainContent() {
                 label = { Text("Enter bill") },
                 leadingIcon = {
                     Icon(
-                        painterResource(R.drawable.ic_baseline_currency_yen_24),
+                        painterResource(R.drawable.ic_us_dollar),
                         "contentDescription")
                 },
                 modifier = Modifier.fillMaxWidth(),
