@@ -52,11 +52,11 @@ fun Navigation(navController: NavHostController) {
         composable(NavigationItem.Movie.route) {
             MovieScreen()
         }
-        composable(NavigationItem.Books.route) {
-            BooksScreen()
+        composable(NavigationItem.Tip.route) {
+            Tip()
         }
         composable(NavigationItem.Profile.route) {
-            ProfileScreen()
+            Portfolio()
         }
     }
 }
@@ -84,7 +84,7 @@ fun BottomNavigation(navController: NavHostController) {
         NavigationItem.Home,
         NavigationItem.Music,
         NavigationItem.Movie,
-        NavigationItem.Books,
+        NavigationItem.Tip,
         NavigationItem.Profile
     )
     androidx.compose.material.BottomNavigation(
