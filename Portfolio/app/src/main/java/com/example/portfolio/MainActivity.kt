@@ -91,9 +91,9 @@ fun CreateInfo() {
     }
 }
 
-//@Preview
+@Preview
 @Composable
-fun CreateImageProfile(size: Int) {
+fun CreateImageProfile(size: Int = 110) {
     Surface(
         modifier = Modifier
             .size(size.dp)
@@ -135,20 +135,8 @@ fun Portfolio(data: List<String>) {
                         Text(text = "A great project", style = MaterialTheme.typography.body1)
                     }
                 }
+
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    PortfolioTheme {
-        Greeting("Android")
     }
 }

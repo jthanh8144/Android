@@ -3,7 +3,6 @@ package com.example.note.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.Instant
 import java.util.*
 
 @Entity(tableName = "notes")
@@ -18,5 +17,12 @@ data class Note(
     val description: String,
 
     @ColumnInfo
-    val entryDate: Date
-)
+    val entryDate: String,
+
+//    @ColumnInfo
+//    val entryDate: Date = Calendar.getInstance().time
+) {
+    init {
+
+    }
+}
