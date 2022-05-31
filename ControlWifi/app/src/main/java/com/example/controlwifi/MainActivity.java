@@ -2,11 +2,14 @@ package com.example.controlwifi;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.material.slider.Slider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,35 +23,40 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private ApiService apiService;
-    private ArrayList<Item> items;
 
-    Button btnUp;
-    Button btnDown;
-    TextView textView;
-    TextView tvPercent;
+    Button btnLeft;
+    Button btnRight;
+    TextView tvSpeed;
+    Slider sldSpeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        btnLeft = findViewById(R.id.btn_left);
+        btnRight = findViewById(R.id.btn_right);
+        tvSpeed = findViewById(R.id.tv_speed);
+        sldSpeed = findViewById(R.id.sld_speed);
+
         apiService = ApiService.getInstance(getApplicationContext());
+
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    apiService.getTemperature()
+                    apiService.getSpeed()
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeWith(new DisposableSingleObserver<Temperature>() {
+                            .subscribeWith(new DisposableSingleObserver<Speed>() {
                                 @Override
-                                public void onSuccess(@NonNull Temperature temperature) {
-                                    textView.setText(temperature.temperature);
+                                public void onSuccess(@NonNull Speed speed) {
+                                    tvSpeed.setText(speed.speed);
                                 }
 
                                 @Override
                                 public void onError(@NonNull Throwable e) {
-
+                                    Log.d("DEBUG1", e.getMessage());
                                 }
                             });
                     try {
@@ -59,62 +67,66 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        btnUp = findViewById(R.id.btn_up);
-        btnDown = findViewById(R.id.btn_down);
-        textView = findViewById(R.id.text_view);
-        tvPercent = findViewById(R.id.tv_percent);
-        apiService.send("10")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<Item>() {
-                    @Override
-                    public void onSuccess(@NonNull Item item) {
-                        Log.d("DEBUG1", "onSuccess: " + item.status);
-                        tvPercent.setText("" + 10);
-                    }
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.d("DEBUG0", e.getMessage());
-                    }
-                });
-
-        btnUp.setOnClickListener(new View.OnClickListener() {
+        sldSpeed.addOnChangeListener(new Slider.OnChangeListener() {
+            @SuppressLint("RestrictedApi")
             @Override
-            public void onClick(View view) {
-                Log.d("debug0", "onClick: up");
-                apiService.up()
+            public void onValueChange(@androidx.annotation.NonNull Slider slider, float value, boolean fromUser) {
+                Log.d("DEBUG1", "onValueChange: " + Math.round(value));
+                apiService.control(Integer.toString(Math.round(value)))
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(new DisposableSingleObserver<Item>() {
+                        .subscribeWith(new DisposableSingleObserver<Status>() {
                             @Override
-                            public void onSuccess(@NonNull Item item) {
-                                Log.d("DEBUG1", "onSuccess: " + item.status);
+                            public void onSuccess(@NonNull Status status) {
+                                Log.d("DEBUG1", "onSuccess: " + status.status);
                             }
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                Log.d("DEBUG0", e.getMessage());
+                                Log.d("DEBUG1", "onError: " + e.getMessage());
                             }
                         });
             }
         });
-        btnDown.setOnClickListener(new View.OnClickListener() {
+
+        btnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("debug0", "onClick: down");
-                apiService.down()
+                Log.d("DEBUG1", "onClick: left");
+                apiService.left()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(new DisposableSingleObserver<Item>() {
+                        .subscribeWith(new DisposableSingleObserver<Status>() {
                             @Override
-                            public void onSuccess(@NonNull Item item) {
-                                Log.d("DEBUG1", "onSuccess: " + item.status);
+                            public void onSuccess(@NonNull Status status) {
+                                Log.d("DEBUG1", "onSuccess: " + status.status);
                             }
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                Log.d("DEBUG0", e.getMessage());
+                                Log.d("DEBUG1", "onError: " + e.getMessage());
+                            }
+                        });
+            }
+        });
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("DEBUG1", "onClick: left");
+                apiService.right()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<Status>() {
+                            @Override
+                            public void onSuccess(@NonNull Status status) {
+                                Log.d("DEBUG1", "onSuccess: " + status.status);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                Log.d("DEBUG1", "onError: " + e.getMessage());
                             }
                         });
             }

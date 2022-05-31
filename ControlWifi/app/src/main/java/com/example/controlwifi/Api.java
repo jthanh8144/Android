@@ -1,21 +1,20 @@
 package com.example.controlwifi;
 
-import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface Api {
-    @GET("/send")
-    public Single<Temperature> getTemperature();
+    @GET("/speed")
+    public Single<Speed> getSpeed();
 
-    @GET("/up")
-    public Single<Item> up();
+    @GET("/left")
+    public Single<Status> left();
 
-    @GET("/down")
-    public Single<Item> down();
+    @GET("/right")
+    public Single<Status> right();
 
-    @GET("/receive")
-    public Single<Item> send(@Query(value="percent", encoded=true) String percent);
+    @GET("/control")
+    public Single<Status> control(@Query(value="percent", encoded=true) String percent);
 }

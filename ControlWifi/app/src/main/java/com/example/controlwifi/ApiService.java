@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiService {
-    private static final String BASE_URL = "http://192.168.1.9/";
+    private static final String BASE_URL = "http://192.168.1.5/";
     private static Api api;
     private static ApiService instance;
 
@@ -30,10 +30,10 @@ public class ApiService {
         return instance;
     }
 
-    public Single<Temperature> getTemperature() {
-        return api.getTemperature();
+    public Single<Speed> getSpeed() {
+        return api.getSpeed();
     }
-    public Single<Item> up() { return api.up(); }
-    public Single<Item> down() { return api.down(); }
-    public Single<Item> send(String percent) { return api.send(percent); }
+    public Single<Status> left() { return api.left(); }
+    public Single<Status> right() { return api.right(); }
+    public Single<Status> control(String percent) { return api.control(percent); }
 }

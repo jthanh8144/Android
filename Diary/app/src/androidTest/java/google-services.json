@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "314875589887",
+    "firebase_url": "https://test-fbfcd-default-rtdb.firebaseio.com",
+    "project_id": "test-fbfcd",
+    "storage_bucket": "test-fbfcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314875589887:android:b57371c41250f58d2348ca",
+        "android_client_info": {
+          "package_name": "com.example.diary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314875589887-3d24g4dj05c658426m50nm1k8p0c9bfk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8i5Sx8qauKNEgsR7Kn3OAsJbdh4Xtyxg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314875589887-3d24g4dj05c658426m50nm1k8p0c9bfk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
