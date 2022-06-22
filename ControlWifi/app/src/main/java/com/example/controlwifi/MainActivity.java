@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 while (true) {
+                    Log.d("DEBUG1", "request");
                     apiService.getSpeed()
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                     try {
-                        TimeUnit.SECONDS.sleep(1);
+                        TimeUnit.SECONDS.sleep(2);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         btnRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("DEBUG1", "onClick: left");
+                Log.d("DEBUG1", "onClick: right");
                 apiService.right()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
